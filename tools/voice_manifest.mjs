@@ -3,7 +3,7 @@ import { VOICE_LINES, SPOKEN, FEMALE, NAME_LINES, COACH_LINES, coachSays, female
 import { NAMES } from '../js/data/names.js';
 
 // האפליקציה הזאת היא קליסתניקס בלבד — מאמנת אחת
-export const VOICES = { maya: 'Tbj9UQjXon5RB9MPEyc2' /* Zina */ };
+export const VOICES = { maya: 'tPkZ8BPQfux4koA8Wyli' /* קול שעוצב למאיה */ };
 const PRONOUN_FIX = { m: [[/גאה בך\./g, 'גאה בְּךָ.']], f: [[/גאה בך\./g, 'גאה בָּךְ.']] };
 
 // הגייה של מונחים לועזיים בשמות התרגילים (רק לקול; הטקסט המוצג נשאר בלי ניקוד)
