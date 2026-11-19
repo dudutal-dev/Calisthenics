@@ -3,6 +3,8 @@
 // spoken = השם בניקוד, לשיפור ההגייה.
 export const NAMES = [
   { name: 'עומר', slug: 'omer', sex: 'm', spoken: 'עוֹמֶר' },
+  { name: 'אלכס', slug: 'alex', sex: 'm', spoken: 'אָלֶכְּס' },
+  { name: 'יהודית', slug: 'yehudit', sex: 'f', spoken: 'יְהוּדִית' },
 ];
 
 export function nameEntry(profile) {
