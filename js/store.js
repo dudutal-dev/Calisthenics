@@ -99,8 +99,13 @@ export function importData(json) {
   if (!data || typeof data !== 'object' || !('profile' in data)) throw new Error('קובץ לא תקין');
   // גיבוי מאפליקציית הסטודיו: כאן יש רק קליסתניקס. אם יש בו סולמות — ממשיכים מהם; אם אין — אי אפשר לשחזר.
   const p = data.profile;
+  // מוביליטי (תמר) קיים רק בסטודיו: האימונים שלה לא עוברים לכאן, והשבוע נבנה מחדש בלי אימוני מוביליטי
+  const hadMob = !!p && (p.track === 'mob' || p.mobN > 0);
+  if (p) { delete p.mob; delete p.mobN; }
+  if (Array.isArray(data.sessions)) data.sessions = data.sessions.filter((x) => x.track !== 'mob');
+  if (p && p.track === 'cali' && hadMob) data.plan = { ...createPlan(p), startDate: data.plan?.startDate || today() };
   if (p && p.track !== 'cali') {
-    if (!p.cali) throw new Error('הגיבוי הוא ממסלול חדר כושר — אין בו נתוני קליסתניקס');
+    if (!p.cali) throw new Error(p.track === 'mob' ? 'הגיבוי הוא ממסלול המוביליטי של הסטודיו — אין בו נתוני קליסתניקס' : 'הגיבוי הוא ממסלול חדר כושר — אין בו נתוני קליסתניקס');
     p.track = 'cali'; p.coach = 'maya'; p.goal = goalForTrack(p.goal, 'cali'); p.level = caliLevel(p.cali); delete p.mixCali;
     data.plan = { ...createPlan(p), startDate: data.plan?.startDate || today() };
   }
