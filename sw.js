@@ -1,7 +1,7 @@
 // Service Worker: קוד האפליקציה נשמר במטמון לפי גרסה (עובד אופליין). מדיה (קול/וידאו) במטמון קבוע שלא נמחק בעדכון:
 // כשגרסת המדיה משתנה, כל קובץ מוגש מיד מהמטמון ומתרענן ברקע — כך שעדכון לא משאיר את המאמן בלי קול כשאין קליטה.
 // הגרסאות מתעדכנות אוטומטית ע״י tools/release.mjs — כל שינוי כאן גורם לדפדפן להתקין את הגרסה החדשה.
-const VERSION = 'cali-20261119.132001';
+const VERSION = 'cali-20261119.134157';
 const MEDIA = 'cali-media-20261119.115729';
 const MEDIA_CACHE = 'cali-media';
 const MEDIA_TAG = 'x-cali-media';
@@ -68,8 +68,8 @@ self.addEventListener('fetch', (e) => {
 // ───── תזכורות Push ─────
 self.addEventListener('push', (e) => {
   let d = {};
-  try { d = e.data ? e.data.json() : {}; } catch { d = { title: 'LOHEM', body: e.data?.text() || '' }; }
-  e.waitUntil(self.registration.showNotification(d.title || 'LOHEM', {
+  try { d = e.data ? e.data.json() : {}; } catch { d = { title: 'קליסתניקס', body: e.data?.text() || '' }; }
+  e.waitUntil(self.registration.showNotification(d.title || 'קליסתניקס', {
     body: d.body || '', tag: d.tag || 'lohem', renotify: true, lang: 'he', dir: 'rtl',
     icon: 'assets/icons/icon-192.png', badge: 'assets/icons/icon-192.png', data: { url: d.url || './#/home' },
   }));
