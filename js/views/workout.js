@@ -79,6 +79,8 @@ export function startWorkout(workout, { readiness = null } = {}) {
     ...(caliW ? ['slow_down', 'skill_intro', 'rung_up', 'rung_wait'] : []),
     ...MOTIVATION_KEYS, ...items.map((it) => `ex_${it.exId}`), ...items.filter((it) => MOBILITY_TIPS[it.exId]).map((it) => `tip_${it.exId}`)]);
 
+  const deferFirst = ['warmup', 'mob', 'cooldown'].includes(items[0]?.role) && items[0]?.unit === 'sec';
+  let firstShown = false;
   const root = el(`<div class="live" role="dialog" aria-label="אימון חי">
     <div class="stage"><img class="stage-bg" alt="" aria-hidden="true"><img class="poster" alt=""><video muted playsinline loop autoplay preload="auto"></video>
       <div class="hud-top"><button class="icon-btn" data-act="exit" aria-label="יציאה">${icon('close', 'width="20" height="20"')}</button>
@@ -231,6 +233,8 @@ export function startWorkout(workout, { readiness = null } = {}) {
 
   function startSet() {
     mode = 'active'; paint();
+    if (deferFirst && !firstShown && k === 0) say(`ex_${item().exId}`);
+    firstShown = true;
     countedReps = 0;
     const it = item(), e = ex(), sl = setLog();
     if (it.unit === 'sec') return runTimed(sl.reps, it.role, e);
@@ -642,7 +646,8 @@ export function startWorkout(workout, { readiness = null } = {}) {
   // פתיחה
   say(`hello_${coach}`, { priority: true });
   if (items[0].role === 'warmup') say('warm_intro');
-  say(`ex_${items[0].exId}`);
+  // התרגיל הראשון: כשהוא תנועת חימום / מתיחה לפי זמן, המאמן מציג אותו רק כשלוחצים "התחל" — לא לפני, ולא פעמיים
+  if (!deferFirst) say(`ex_${items[0].exId}`);
   if (w.note) toast(w.note, 4200);
   paint();
 }
