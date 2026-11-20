@@ -1074,3 +1074,6 @@ html.locked body { overflow: hidden; }
 .guard-note p { margin: 0; font-size: 13.5px; line-height: 1.45; }
 .guard-note p + p { margin-top: 8px; }
 .alg-warn { display: flex !important; align-items: center; gap: 4px; color: var(--orange) !important; font-weight: 700; }
+
+/* כפתור מוזיקת הרקע באימון: כבוי = מעומעם */
+.live .hud-top .icon-btn.off { opacity: 0.45; }
