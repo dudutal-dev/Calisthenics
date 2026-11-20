@@ -278,7 +278,7 @@ export function renderOnboarding(root, done) {
         track: d.track, ...(d.auto ? { gymAccess: d.gymAccess } : {}), ...(caliState ? { cali: caliState } : {}), ...(mix() ? { mixCali: mixCaliCount(d) } : {}), gymCoach: d.gymCoach || 'ori',
         coach: d.coach, name: d.name, age: d.age, sex: d.sex, heightCm: d.heightCm, weightKg: d.weightKg, targetWeight: d.targetWeight,
         goal: d.goal, level, days: d.days, sessionMin: d.sessionMin, run3k, runLevel: runLevelFrom3k(run3k), injuries: d.injuries,
-        nutrition: d.nutrition !== false, ...(d.nutrition ? { diet: d.diet, kosher: d.kosher, mealsN: d.mealsN, allergies: d.allergies, health: d.health } : {}),
+        nutrition: d.nutrition !== false, ...(d.nutrition ? { diet: d.diet, kosher: d.kosher, mealsN: d.mealsN, allergies: d.allergies, health: d.health, ...(d.eatAt === 'service' ? { eatAt: 'service' } : {}) } : {}),
         dislikes: d.nutrition ? d.dislikes : [], dislikedFoods: [], createdAt: new Date().toISOString(),
         lifts: liftsFrom((k, f) => d[`lift_${k}_${f}`]),
       };
