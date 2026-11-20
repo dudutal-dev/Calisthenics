@@ -89,7 +89,7 @@ export function startWorkout(workout, { readiness = null } = {}) {
     return 'groove';
   };
   const deferFirst = ['warmup', 'mob', 'cooldown'].includes(items[0]?.role) && items[0]?.unit === 'sec';
-  let firstShown = false;
+  let firstShown = false, firstWait = false;
   const root = el(`<div class="live" role="dialog" aria-label="אימון חי">
     <div class="stage"><img class="stage-bg" alt="" aria-hidden="true"><img class="poster" alt=""><video muted playsinline loop autoplay preload="auto"></video>
       <div class="hud-top"><button class="icon-btn" data-act="exit" aria-label="יציאה">${icon('close', 'width="20" height="20"')}</button>
@@ -244,7 +244,9 @@ export function startWorkout(workout, { readiness = null } = {}) {
 
   function startSet() {
     mode = 'active'; paint();
-    if (deferFirst && !firstShown && k === 0) say(`ex_${item().exId}`);
+    // לחצו "התחל" בזמן הברכה: הצגת התרגיל הראשון לא נזרקת מהתור, והשעון מחכה לה
+    firstWait = deferFirst && !firstShown && k === 0;
+    if (firstWait) say(`ex_${item().exId}`, { keep: true });
     firstShown = true;
     countedReps = 0;
     const it = item(), e = ex(), sl = setLog();
@@ -329,7 +331,7 @@ export function startWorkout(workout, { readiness = null } = {}) {
     // תרגיל זמן סטטי (פלאנק, נשיאה): "מתחילים להחזיק… עכשיו!"; דינמי (סקוואט, ברכיים גבוהות, חבלים): "מתחילים!"
     if (!mobility) say(e?.pattern === 'core' || e?.hold || e?.id === 'farmer_carry' ? 'hold_start' : 'warm_go', { priority: true });
     const sides = e?.unilateral && (mobility || e?.hold); // החזקה חד־צדדית: מחליפים צד באמצע
-    const waitUntil = Date.now() + 15000;
+    const waitUntil = Date.now() + (firstWait ? 32000 : 15000);
     let lastSec = -1, half = false, cheered = false, tipped = false;
     timer = setInterval(() => {
       if (startAt == null) {
