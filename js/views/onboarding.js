@@ -34,7 +34,7 @@ export function renderOnboarding(root, done) {
   const d = {
     track: 'cali', auto: false, gymAccess: 'no', coach: 'maya', equip: [], squats: 20, dips: 0, plankSec: 45, name: '', age: 20, heightCm: 178, weightKg: 72, targetWeight: 75, sex: 'm',
     goal: 'skill', years: 1, pushups: 15, pullups: 3, run3kStr: '', days: 3, sessionMin: 60,
-    injuries: [], dislikes: [], dislikedFoods: [], nutrition: null, diet: 'all', kosher: false, mealsN: 5, allergies: [],
+    injuries: [], dislikes: [], dislikedFoods: [], nutrition: null, diet: 'all', kosher: false, mealsN: 5, allergies: [], health: [],
   };
   let step = 0;
   const STEPS = 11;
@@ -205,7 +205,8 @@ export function renderOnboarding(root, done) {
       <div class="content">${views[step]()}</div>
       ${isBuild ? '' : html`<div class="actions">
         ${step > 0 ? '<button class="btn" data-act="back">חזרה</button>' : ''}
-        <button class="btn primary block xl" data-act="next">${step === 0 ? 'בוא נתחיל' : last ? 'בנה לי תוכנית' : step === REC - 1 ? 'להמלצה' : 'המשך'}</button></div>`}
+        <button class="btn primary block xl" data-act="next">${step === 0 ? 'בוא נתחיל' : last ? 'בנה לי תוכנית' : step === REC - 1 ? 'להמלצה' : 'המשך'}</button></div>
+        ${step === 0 ? `<button class="gate-guide" data-act="guide">${icon('info', 'width="16" height="16"')} איך זה עובד? הסבר קצר</button>` : ''}`}
     </div>`;
     // הסעיף נשאר פתוח גם כשהמסך מצויר מחדש (למשל אחרי בחירת ניסיון)
     root.querySelector('details.lifts')?.addEventListener('toggle', (e) => { d.liftsOpen = e.target.open; });
@@ -215,6 +216,7 @@ export function renderOnboarding(root, done) {
   on(root, 'click', '[data-act]', (e, t) => {
     unlock();
     readInputs();
+    if (t.dataset.act === 'guide') { location.hash = '#/guide'; return; }
     if (t.dataset.act === 'back') { step = step === 2 ? 0 : step - 1; paint(); return; }   // אין שלב בחירת מסלול (1)
     if (root.querySelector('[data-nut]') && d.nutrition == null) { toast('רוצים ליווי תזונה? בוחרים כן או לא'); return; }
     if (step === 3 && !d.name) { toast('איך קוראים לך?'); return; }
@@ -276,7 +278,7 @@ export function renderOnboarding(root, done) {
         track: d.track, ...(d.auto ? { gymAccess: d.gymAccess } : {}), ...(caliState ? { cali: caliState } : {}), ...(mix() ? { mixCali: mixCaliCount(d) } : {}), gymCoach: d.gymCoach || 'ori',
         coach: d.coach, name: d.name, age: d.age, sex: d.sex, heightCm: d.heightCm, weightKg: d.weightKg, targetWeight: d.targetWeight,
         goal: d.goal, level, days: d.days, sessionMin: d.sessionMin, run3k, runLevel: runLevelFrom3k(run3k), injuries: d.injuries,
-        nutrition: d.nutrition !== false, ...(d.nutrition ? { diet: d.diet, kosher: d.kosher, mealsN: d.mealsN, allergies: d.allergies } : {}),
+        nutrition: d.nutrition !== false, ...(d.nutrition ? { diet: d.diet, kosher: d.kosher, mealsN: d.mealsN, allergies: d.allergies, health: d.health } : {}),
         dislikes: d.nutrition ? d.dislikes : [], dislikedFoods: [], createdAt: new Date().toISOString(),
         lifts: liftsFrom((k, f) => d[`lift_${k}_${f}`]),
       };
