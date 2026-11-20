@@ -60,8 +60,8 @@ function slides() {
     },
     {
       id: 'home', title: 'מסך הבית', eyebrow: 'כל יום',
-      visual: `<div class="g-mock"><div class="gm-row"><span class="gm-ring num">72</span><div><b>הכושר שלך</b><small>כוח · מיומנות · עקביות · גוף</small></div></div>
-        <div class="gm-card"><small>האימון הבא</small><b>גוף מלא A</b><span class="gm-btn">התחל אימון</span></div></div>`,
+      visual: `<div class="g-mock"><div class="gm-card"><small>האימון הבא</small><b>גוף מלא A</b><span class="gm-btn">התחל אימון</span></div>
+        <div class="gm-row"><span class="gm-ring num">64%</span><div><b>התזונה של היום</b><small>נשארו 780 קק״ל · הארוחה הבאה</small></div></div></div>`,
       body: tip('🎯', '<b>האימון הבא</b> — תמיד בראש המסך. לא צמוד לימים בשבוע: פשוט עושים את הבא.') +
         tip('🍽️', '<b>התזונה של היום</b> — כמה קלוריות נשארו, חלבון, פחמימה ושומן, והארוחה הבאה. מופיע למי שבחר בליווי תזונה; הקשה פותחת את מסך התזונה.') +
         tip('💧', '<b>ארבעה אריחים</b> — מים, משקל, מוכנות וכושר. הקשה אחת על אריח.') +
