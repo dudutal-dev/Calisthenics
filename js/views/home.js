@@ -14,7 +14,7 @@ import { MOTIVATION_KEYS, lineFor } from '../data/voice-lines.js';
 import { startWorkout } from './workout.js';
 import { startRun } from './run.js';
 import { isCali, hasCali, hasGym, sessionCoach } from '../engine/cali.js';
-import { reminderPromptHtml, bindReminderPrompt } from './reminders-ui.js';
+import { reminderPromptHtml, bindReminderPrompt, scheduleRowHtml, bindSchedule } from './reminders-ui.js';
 import { backupDue, backupNow, snoozeBackup } from '../backup.js';
 
 export function nextSession(s) {
@@ -119,6 +119,8 @@ export function renderHome(root) {
         <div class="hero-sub">${ns?.run ? `<button class="btn sm" data-act="run">${icon('run', 'width="18" height="18"')} רק ריצה</button>` : ''}
       <button class="btn sm" data-act="field" ${ns?.run ? '' : 'style="grid-column:1/-1"'}>${icon('pack', 'width="18" height="18"')} אימון בלי ציוד</button></div></div></div>`}
 
+    ${scheduleRowHtml()}
+
     <div class="card coach-hero">
       <div class="holo"><img src="${coach.face}" alt="${coach.name}"></div>
       <div class="bubble">${line.text}</div>
@@ -163,6 +165,7 @@ export function renderHome(root) {
     if (a === 'backup-later') { snoozeBackup(7); renderHome(root); }
     if (a === 'checkin') checkIn(() => renderHome(root), true);
   };
+  bindSchedule(root, () => renderHome(root));
   on(root, 'click', '[data-act]', (e, el) => act(el.dataset.act, el));
 }
 
