@@ -22,3 +22,4 @@ maya/names/ziv_f/run_done.mp3
 maya/names/ziv_f/hr_ready.mp3
 maya/names/sarit/hello.mp3
 maya/names/sarit/pr.mp3
+maya/names/aviv_f/half.mp3
