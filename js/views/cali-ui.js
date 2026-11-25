@@ -5,7 +5,7 @@ import { EX } from '../data/exercises.js';
 import { COACHES, demoPoster } from '../data/coaches.js';
 import { EQUIP, MAX_ACTIVE_SKILLS } from '../data/cali.js';
 import { LADDERS, STRENGTH_LADDERS, SKILL_LADDERS, rungState, ladderLock, ladderOpen, setRung, toggleSkill, newCali, caliLevel, recommendTrack, mixCaliCount } from '../engine/cali.js';
-import { goalForTrack } from '../engine/program.js';
+import { goalOnSwitch } from '../engine/program.js';   // 25.11.2026: המעבר זוכר את המטרה הקודמת ומחזיר אותה (profile.goalBack)
 import { infoSheet } from './workout.js';
 import { say, stop, unlock } from '../coach/voice.js';
 
@@ -87,7 +87,7 @@ export function switchTrack(track, rerender) {
     set((s) => {
       const q = s.profile;
       if (q.track === 'cali') q.level = q.gymLevel || q.level || 2;
-      q.track = 'gym'; q.coach = q.gymCoach || 'ori'; q.goal = goalForTrack(q.goal, 'gym');
+      q.track = 'gym'; q.coach = q.gymCoach || 'ori'; q.goal = goalOnSwitch(q, 'gym');
       s.plan = createPlan(q);
       return s;
     });
@@ -137,8 +137,8 @@ function toCali(track, cali, rerender) {
     q.cali = cali;
     if (track === 'mix') {
       if (q.track === 'cali') q.level = q.gymLevel || q.level || 2;
-      q.track = 'mix'; q.coach = q.gymCoach || 'ori'; q.goal = goalForTrack(q.goal, 'gym');
-    } else { q.track = 'cali'; q.coach = 'maya'; q.goal = goalForTrack(q.goal, 'cali'); q.level = caliLevel(cali); }
+      q.track = 'mix'; q.coach = q.gymCoach || 'ori'; q.goal = goalOnSwitch(q, 'gym');
+    } else { q.track = 'cali'; q.coach = 'maya'; q.goal = goalOnSwitch(q, 'cali'); q.level = caliLevel(cali); }
     s.plan = createPlan(q);
     return s;
   });

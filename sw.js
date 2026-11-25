@@ -1,14 +1,14 @@
 // Service Worker: קוד האפליקציה נשמר במטמון לפי גרסה (עובד אופליין). מדיה (קול/וידאו) במטמון קבוע שלא נמחק בעדכון:
 // כשגרסת המדיה משתנה, כל קובץ מוגש מיד מהמטמון ומתרענן ברקע — כך שעדכון לא משאיר את המאמן בלי קול כשאין קליטה.
 // הגרסאות מתעדכנות אוטומטית ע״י tools/release.mjs — כל שינוי כאן גורם לדפדפן להתקין את הגרסה החדשה.
-const VERSION = 'cali-20261125.061642';
+const VERSION = 'cali-20261125.104605';
 const MEDIA = 'cali-media-20261121.195359';
 const MEDIA_CACHE = 'cali-media';
 const MEDIA_TAG = 'x-cali-media';
 const CORE = [
   './', 'index.html', 'manifest.webmanifest', 'css/app.css', 'version.json',
   'js/app.js', 'js/intro.js', 'js/share-card.js', 'js/app-id.js', 'js/lic.js', 'js/install.js', 'js/brand.js', 'js/version.js', 'js/updater.js', 'js/theme.js', 'js/reminders.js', 'js/views/reminders-ui.js', 'js/store.js', 'js/ui/dom.js', 'js/ui/charts.js', 'js/coach/voice.js', 'js/coach/keepalive.js', 'assets/silence.mp3', 'js/coach/music.js',
-  'js/data/exercises.js', 'js/data/cali-exercises.js', 'js/data/cali.js', 'js/data/foods.js', 'js/data/dishes.js', 'js/data/coaches.js', 'js/data/voice-lines.js', 'js/data/names.js', 'js/data/demo-timing.js', 'js/data/voice-timing.js',
+  'js/data/exercises.js', 'js/data/cali-exercises.js', 'js/data/cali.js', 'js/data/foods.js', 'js/data/food-groups.js', 'js/data/dishes.js', 'js/data/coaches.js', 'js/data/voice-lines.js', 'js/data/names.js', 'js/data/demo-timing.js', 'js/data/voice-timing.js',
   'js/engine/program.js', 'js/engine/progression.js', 'js/engine/running.js', 'js/engine/nutrition.js', 'js/engine/schedule.js', 'js/views/calendar-ui.js', 'js/engine/stats.js', 'js/engine/history-edit.js', 'js/engine/summary.js', 'js/engine/cali.js', 'js/backup.js', 'js/barcode.js',
   'js/views/onboarding.js', 'js/views/home.js', 'js/views/plan.js', 'js/views/workout.js', 'js/views/run.js',
   'js/views/progress.js', 'js/views/nutrition.js', 'js/views/nut-prefs.js', 'js/views/coach.js', 'js/views/garmin.js', 'js/views/guide.js', 'js/views/history.js', 'js/views/plan-intro.js', 'js/views/cali-ui.js',

@@ -33,6 +33,17 @@ const TRACK_GOALS = { gym: ['combat', 'muscle', 'strength', 'cut'], cali: ['skil
 export const goalsFor = (track) => TRACK_GOALS[track === 'cali' ? 'cali' : 'gym'];
 // מעבר בין מסלולים: המטרה המקבילה במסלול השני
 export const goalForTrack = (goal, track) => (goalsFor(track).includes(goal) ? goal : track === 'cali' ? 'skill' : 'combat');
+// מעבר מסלול שזוכר את המטרה הקודמת (25.11.2026): כשהמטרה לא קיימת במסלול החדש היא הוחלפה במטרת ברירת המחדל שלו, והמקורית אבדה —
+// חדר כושר עם "כוח מקסימלי" ← קליסתניקס ← חזרה לחדר כושר נגמר ב"כושר כללי": אותן קלוריות, תוכנית אחרת.
+// profile.goalBack = { from: המטרה שהוחלפה, to: מה שבא במקומה }. בחזרה למסלול שהמטרה המקורית קיימת בו היא חוזרת —
+// רק אם המטרה הנוכחית היא עדיין זו שהוצבה אוטומטית (מי שבחר בינתיים מטרה אחרת בעצמו — הבחירה שלו קובעת).
+export function goalOnSwitch(q, track) {
+  const back = q.goalBack?.to === q.goal ? q.goalBack : null;
+  if (back && goalsFor(track).includes(back.from)) { delete q.goalBack; return back.from; }
+  const g = goalForTrack(q.goal, track);
+  if (g !== q.goal) q.goalBack = { from: back ? back.from : q.goal, to: g };
+  return g;
+}
 
 // ───── תבניות פיצול ─────
 // כל משבצת: role + רשימת תרגילים מועדפים לפי סדר (בחירה לפי רמה/פציעות/רוטציה)
