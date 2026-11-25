@@ -94,11 +94,20 @@ export function regenerateWeek(s) {
 export function exportData() {
   return JSON.stringify(state, null, 1);
 }
-export function importData(json) {
-  const data = JSON.parse(json);
-  if (!data || typeof data !== 'object' || !('profile' in data)) throw new Error('קובץ לא תקין');
+// קובץ גיבוי נבדק לפני שהוא מחליף את מה שבטלפון (25.11.2026): פרופיל ותוכנית אמיתיים, ורשימות במקום שהאפליקציה מצפה לרשימות.
+// קודם התקבל כל JSON עם מפתח profile — קובץ שגוי מחק את כל הנתונים או השאיר מסך ריק. מפתח שחסר בגיבוי ישן מתמלא מברירת המחדל, כמו בטעינה.
+const isObj = (v) => !!v && typeof v === 'object' && !Array.isArray(v);
+export function readBackup(json) {
+  let data;
+  try { data = JSON.parse(json); } catch { throw new Error('הקובץ אינו קובץ גיבוי תקין'); }
+  const p = data?.profile, pl = data?.plan, bad = (m) => { throw new Error(m); };
+  if (!isObj(data) || !('profile' in data)) bad('הקובץ אינו גיבוי של האפליקציה');
+  if (!isObj(p) || typeof p.name !== 'string' || !p.name || !(Number(p.days) > 0)) bad('אין בקובץ פרופיל — אי אפשר לשחזר ממנו');
+  if (!isObj(pl) || !Array.isArray(pl.week?.sessions) || !Array.isArray(pl.completedDays)) bad('אין בקובץ תוכנית אימונים — אי אפשר לשחזר ממנו');
+  for (const k of ['sessions', 'runs', 'weights', 'events']) if (k in data && !(Array.isArray(data[k]) && data[k].every(isObj))) bad('הקובץ פגום — אי אפשר לשחזר ממנו');
+  for (const k of ['history', 'daily', 'settings']) if (k in data && !isObj(data[k])) bad('הקובץ פגום — אי אפשר לשחזר ממנו');
+  if ('xp' in data && !Number.isFinite(data.xp)) bad('הקובץ פגום — אי אפשר לשחזר ממנו');
   // גיבוי מאפליקציית הסטודיו: כאן יש רק קליסתניקס. אם יש בו סולמות — ממשיכים מהם; אם אין — אי אפשר לשחזר.
-  const p = data.profile;
   // מוביליטי (תמר) קיים רק בסטודיו: האימונים שלה לא עוברים לכאן, והשבוע נבנה מחדש בלי אימוני מוביליטי
   const hadMob = !!p && (p.track === 'mob' || p.mobN > 0);
   if (p) { delete p.mob; delete p.mobN; }
@@ -109,7 +118,10 @@ export function importData(json) {
     p.track = 'cali'; p.coach = 'maya'; p.goal = goalForTrack(p.goal, 'cali'); p.level = caliLevel(p.cali); delete p.mixCali;
     data.plan = { ...createPlan(p), startDate: data.plan?.startDate || today() };
   }
-  state = { ...structuredClone(DEFAULT), ...data };
+  return data;
+}
+export function importData(json) {
+  state = { ...structuredClone(DEFAULT), ...readBackup(json) };
   save();
   subs.forEach((s) => s(state));
 }

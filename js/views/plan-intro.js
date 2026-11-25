@@ -7,10 +7,9 @@ import { EX } from '../data/exercises.js';
 import { FOOD } from '../data/foods.js';
 import { GOALS, LEVEL_NAMES } from '../engine/program.js';
 import { isCali, isMix, hasCali, hasGym, sessionCoach, rungState, mixCaliCount, LADDERS, STRENGTH_LADDERS } from '../engine/cali.js';
-import { mealPlan, wantsNutrition } from '../engine/nutrition.js';
+import { mealPlan, menuToday, mainCtx, wantsNutrition } from '../engine/nutrition.js';
 import { estMinutes } from './home.js';
 
-const CTX = 'home'; // התפריט לדוגמה: מה שאוכלים בבית
 
 export function openPlanIntro(onDone) {
   document.querySelector('.plan-intro')?.remove();
@@ -18,7 +17,7 @@ export function openPlanIntro(onDone) {
   const cali = isCali(p), mix = isMix(p);
   const coaches = mix ? [COACHES[p.gymCoach || p.coach], COACHES.maya] : [COACHES[p.coach]];
   const fem = p.sex === 'f';
-  const plan = mealPlan(p, { ctx: CTX, seed: new Date().getDate() });
+  const plan = mealPlan(p, menuToday(s, mainCtx(p)));   // אותן מנות כמו בתפריט של היום במסך הבית ובמסך התזונה (25.11.2026); הכמויות כאן לפי היעד היומי הרגיל
   const t = plan.targets;
   const kcalOf = (g, per) => Math.round(g * per);
   const pct = (g, per) => Math.round((kcalOf(g, per) / Math.max(1, t.kcal)) * 100);

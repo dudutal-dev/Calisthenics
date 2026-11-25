@@ -517,7 +517,7 @@ export function startWorkout(workout, { readiness = null } = {}) {
         if (e.role === 'finisher') continue;
         (s2.history[e.exId] ||= []).push({ date: nowIso, sid, sets: e.sets, target: e.target });
       }
-      s2.sessions.push({ id: sid, date: nowIso, name: w.name, ...(caliW ? { track: 'cali' } : {}), day: workout.day ?? null, field: !!workout.field, durationSec: dur, volume: Math.round(volume), setsDone, exercises, prs, warmupDone: mobilityDone.warmup, stretchDone: mobilityDone.cooldown, readiness: w.readiness ?? null, partial, hr });
+      s2.sessions.push({ id: sid, date: nowIso, name: w.name, ...(caliW ? { track: 'cali' } : {}), day: workout.day ?? null, field: !!workout.field, durationSec: dur, volume: Math.round(volume), setsDone, exercises, prs, warmupDone: mobilityDone.warmup, stretchDone: mobilityDone.cooldown, readiness: w.readiness ?? null, partial, hr, xp: gained });   // xp: כדי שמחיקה מההיסטוריה תוריד בדיוק מה שהאימון נתן
       if (workout.day != null && !partial && !s2.plan.completedDays.includes(workout.day)) s2.plan.completedDays.push(workout.day);
       // קליסתניקס: עלייה/ירידה בסולמות לפי הביצוע, והשבוע נבנה מחדש עם השלבים החדשים
       if (hasCali(s2.profile) && caliW) {
